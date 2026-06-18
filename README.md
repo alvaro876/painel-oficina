@@ -54,30 +54,6 @@ Next.js 16 (App Router) · React 19 · TypeScript (strict) · Tailwind v4 · dep
 
 ---
 
-## Variáveis de ambiente
-
-Copie `.env.example` → `.env.local` e preencha. **Nunca** commite o `.env.local`.
-
-| Variável | Pra quê |
-|---|---|
-| `CLICKHOUSE_HOST` / `CLICKHOUSE_USER` / `CLICKHOUSE_PASSWORD` | acesso ao DW (mesmas do vammo-reserva) |
-| `REGISTROS_SHEET_ID` | ID da planilha de check-in (cópia IMPORTRANGE) |
-| `APP_PASSWORD` | portão de senha temporário (Basic Auth). Vazio em dev = aberto; setado no Vercel = protege |
-| `LAYOUT_SHEET_ID` / `GOOGLE_SERVICE_ACCOUNT_JSON` | persistência do layout em prod (fase 5) |
-| `AUTH_*` / `KIOSK_SECRET` | login Google + quiosque (fase 6) |
-
----
-
-## Rodar local
-
-```bash
-npm install
-cp .env.example .env.local   # e preencher CLICKHOUSE_* + REGISTROS_SHEET_ID
-npm run dev                  # http://localhost:3000
-```
-
----
-
 ## Deploy (Vercel)
 
 1. Importe o repositório no Vercel (New Project → from GitHub).
