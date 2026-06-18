@@ -1,12 +1,14 @@
 "use client";
 
-import { Suspense, useCallback } from "react";
+import { Suspense, useCallback, useState } from "react";
 import { usePolling } from "@/hooks/usePolling";
 import { useBase } from "@/hooks/useBase";
+import { useIsNarrow } from "@/hooks/useIsNarrow";
 import { AppShell } from "@/components/AppShell";
 import { Loading } from "@/components/Loading";
 import { LiveIndicator } from "@/components/LiveIndicator";
 import { RampaMap, type RampaCart } from "@/components/rampa/RampaMap";
+import { RampaList } from "@/components/rampa/RampaList";
 import { IdleStrip } from "@/components/rampa/IdleStrip";
 import { Metric } from "@/components/Metric";
 import { FRENTE_STATUSES } from "@/lib/status";
@@ -14,7 +16,6 @@ import { mecBaseMap } from "@/lib/merge";
 import { REFRESH, TIME_RED } from "@/config/thresholds";
 import type { CartLogin, LayoutRow, LiveResponse, WorkshopOS, WorkshopResponse } from "@/types";
 
-// Prioridade ao escolher a OS que representa um carrinho: IN_PROGRESS na frente.
 const rank = (os: WorkshopOS): number => (os.status_atual === "IN_PROGRESS" ? 0 : 1);
 
 export default function RampaPage() {
@@ -27,6 +28,10 @@ export default function RampaPage() {
 
 function RampaInner() {
   const base = useBase();
+  const narrow = useIsNarrow();
+  const [view, setView] = useState<"mapa" | "lista" | null>(null);
+  const effectiveView = view ?? (narrow ? "lista" : "mapa");
+
   const ws = usePolling<WorkshopResponse>("/api/workshop", REFRESH.workshopMs);
   const rg = usePolling<LiveResponse<CartLogin>>("/api/registros", REFRESH.registrosMs);
   const ly = usePolling<LiveResponse<LayoutRow>>("/api/layout", REFRESH.layoutMs);
@@ -38,17 +43,11 @@ function RampaInner() {
 
   const rows = base ? all.filter((r) => r.location_id === base) : all;
   const bmap = mecBaseMap(all, mechBase);
-  const logins = allLogins.filter(
-    (l) => !base || bmap.get(l.mecanico.toLowerCase()) === base
-  );
+  const logins = allLogins.filter((l) => !base || bmap.get(l.mecanico.toLowerCase()) === base);
 
-  // email -> carrinho (de todos os logins, pra achar o carrinho do mecânico)
   const cartByMec = new Map(allLogins.map((l) => [l.mecanico.toLowerCase(), l.carrinho]));
 
   const rampaRows = rows.filter((r) => FRENTE_STATUSES.rampa.includes(r.status_atual));
-  // Um card por carrinho. Carrinho não é único entre bases → compõe a key com
-  // location_id. Um mecânico pode ter +1 OS ativa → dedup, mantendo a melhor
-  // (IN_PROGRESS antes; em empate, a que entrou no status há menos tempo).
   const cartMap = new Map<string, RampaCart>();
   for (const os of rampaRows) {
     const carrinho = os.mecanico_email
@@ -97,13 +96,46 @@ function RampaInner() {
   return (
     <AppShell right={<LiveIndicator fetchedAt={ws.fetchedAt} error={!!ws.error} />}>
       <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
           <Metric label="Na rampa" value={rampaRows.length} />
           <Metric label="Ociosos" value={idle.length} color="var(--warn)" />
           <Metric label="Acima de 60min" value={acima60} color="var(--danger)" />
           <Metric label="Acima do estimado" value={acimaEstimado} color="var(--danger)" />
         </div>
-        <RampaMap carts={carts} layout={layout} canEdit onMove={onMove} />
+
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex rounded-md overflow-hidden" style={{ border: "1px solid var(--border)" }}>
+            {(["mapa", "lista"] as const).map((v) => {
+              const active = effectiveView === v;
+              return (
+                <button
+                  key={v}
+                  onClick={() => setView(v)}
+                  className="text-xs px-3 py-1"
+                  style={{
+                    color: active ? "var(--text)" : "var(--text-dim)",
+                    background: active ? "var(--surface-2)" : "transparent",
+                    fontWeight: active ? 500 : 400,
+                  }}
+                >
+                  {v === "mapa" ? "Mapa" : "Lista"}
+                </button>
+              );
+            })}
+          </div>
+          {effectiveView === "mapa" && (
+            <span className="text-xs hidden sm:block" style={{ color: "var(--text-tertiary, var(--text-dim))" }}>
+              arraste os carrinhos entre os lados
+            </span>
+          )}
+        </div>
+
+        {effectiveView === "mapa" ? (
+          <RampaMap carts={carts} layout={layout} canEdit onMove={onMove} />
+        ) : (
+          <RampaList carts={carts} layout={layout} canEdit onMove={onMove} />
+        )}
+
         <IdleStrip idle={idle} />
       </div>
     </AppShell>

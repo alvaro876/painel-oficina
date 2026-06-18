@@ -31,7 +31,7 @@ export function DiagQueue({
 
   return (
     <div>
-      <div className="grid grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-4">
         <Metric label="Em diagnóstico" value={emDiag} />
         <Metric label="Aguard. mecânico" value={aguardando} />
         <Metric label="Em piso" value={piso} color="var(--danger)" />

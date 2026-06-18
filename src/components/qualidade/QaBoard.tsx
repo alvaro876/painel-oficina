@@ -49,7 +49,7 @@ export function QaBoard({
 
   return (
     <div className="max-w-5xl mx-auto">
-      <div className="grid grid-cols-4 gap-3 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-5">
         <Metric label="Na fila de QA" value={count("AWAITING_QA")} />
         <Metric label="Inspecionando" value={count("IN_QA")} color="var(--info)" />
         <Metric label="Reprovadas" value={count("QA_REJECTED")} color="var(--danger)" />

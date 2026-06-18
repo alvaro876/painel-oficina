@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   description: "Visão de gestão em tempo real da oficina de manutenção",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

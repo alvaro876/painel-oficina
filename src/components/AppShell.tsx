@@ -25,22 +25,24 @@ export function AppShell({
   return (
     <div className="min-h-full flex flex-col">
       <header
-        className="flex items-center justify-between px-5 h-14 border-b"
+        className="border-b px-3 py-2 flex flex-col gap-2 md:h-14 md:flex-row md:items-center md:justify-between md:gap-4 md:py-0 md:px-5"
         style={{ borderColor: "var(--border)", background: "var(--surface)" }}
       >
-        <div className="flex items-center gap-6">
-          <span className="font-medium whitespace-nowrap">
-            Painel de Oficina{" "}
-            <span style={{ color: "var(--text-dim)" }}>· Vammo</span>
+        <div className="flex items-center gap-3 md:gap-5 min-w-0">
+          <span className="font-medium whitespace-nowrap text-sm md:text-base">
+            Painel de Oficina
+            <span className="hidden lg:inline" style={{ color: "var(--text-dim)" }}>
+              {" "}· Vammo
+            </span>
           </span>
-          <nav className="flex gap-1">
+          <nav className="flex gap-1 overflow-x-auto">
             {TABS.map((t) => {
               const active = path === t.href;
               return (
                 <Link
                   key={t.href}
                   href={t.href + qs}
-                  className="px-3 py-1.5 rounded-md text-sm transition-colors"
+                  className="px-3 py-1.5 rounded-md text-sm whitespace-nowrap transition-colors"
                   style={{
                     color: active ? "var(--text)" : "var(--text-dim)",
                     background: active ? "var(--surface-2)" : "transparent",
@@ -53,12 +55,12 @@ export function AppShell({
             })}
           </nav>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 justify-between md:justify-end">
           <BaseSelector />
           {right}
         </div>
       </header>
-      <main className="flex-1 p-5">{children}</main>
+      <main className="flex-1 p-3 md:p-5">{children}</main>
     </div>
   );
 }
