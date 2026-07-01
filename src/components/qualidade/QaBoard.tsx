@@ -78,14 +78,14 @@ export function QaBoard({
             >
               <div className="flex items-center gap-3">
                 <span
-                  className="text-xs px-2 py-1 rounded-md text-center shrink-0"
-                  style={{ width: 108, color: chip.color, background: `color-mix(in srgb, ${chip.color} 16%, transparent)` }}
+                  className="px-2 py-1 rounded-md text-center shrink-0"
+                  style={{ width: 124, fontSize: 13, color: chip.color, background: `color-mix(in srgb, ${chip.color} 16%, transparent)` }}
                 >
                   {chip.label}
                 </span>
                 <Plate value={r.placa} size="md" />
                 <div className="min-w-0">
-                  <div className="text-sm truncate" style={{ color: "var(--text-dim)" }}>
+                  <div className="truncate" style={{ fontSize: 15, color: "var(--text-dim)" }}>
                     {r.modelo}
                     {mec ? ` · ${mec}` : ""}
                     {base ? ` · ${base.name}` : ""}
@@ -99,7 +99,7 @@ export function QaBoard({
 
               {r.pecas_nomes && r.pecas_nomes.length > 0 && (
                 <div style={{ marginTop: 10 }}>
-                  <div className="text-xs mb-1.5" style={{ color: "var(--text-dim)" }}>
+                  <div className="mb-1.5" style={{ fontSize: 13, color: "var(--text-dim)" }}>
                     Peças trocadas ({r.pecas_nomes.length})
                   </div>
                   <div className="flex flex-wrap gap-1.5">
@@ -108,8 +108,8 @@ export function QaBoard({
                         key={i}
                         className="rounded-md"
                         style={{
-                          fontSize: 12.5,
-                          padding: "3px 9px",
+                          fontSize: 14,
+                          padding: "4px 10px",
                           background: "var(--surface-2)",
                           color: "var(--text)",
                         }}

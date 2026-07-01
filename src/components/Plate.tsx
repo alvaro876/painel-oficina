@@ -1,5 +1,4 @@
-// Placa no estilo Mercosul (barra "BRASIL" azul + número), pra bater o olho
-// rápido — é a placa que os gestores procuram.
+// Placa no estilo Mercosul (barra "BRASIL" azul + número).
 export function Plate({
   value,
   size = "md",
@@ -7,8 +6,8 @@ export function Plate({
   value: string;
   size?: "sm" | "md" | "lg";
 }) {
-  const numF = size === "lg" ? 20 : size === "sm" ? 13 : 16;
-  const topF = size === "lg" ? 8 : 6.5;
+  const numF = size === "lg" ? 26 : size === "sm" ? 15 : 20;
+  const topF = size === "lg" ? 9 : size === "sm" ? 7 : 8;
 
   return (
     <span
@@ -45,7 +44,7 @@ export function Plate({
           color: "#0e1f3d",
           fontSize: numF,
           textAlign: "center",
-          padding: "2px 8px 3px",
+          padding: "2px 10px 3px",
           letterSpacing: 1,
         }}
       >

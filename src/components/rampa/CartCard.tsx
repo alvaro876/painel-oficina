@@ -96,19 +96,19 @@ export function CartCard({
       <div style={{ padding: "9px 11px" }}>
         <div
           className="flex items-center justify-between"
-          style={{ fontSize: 12.5, fontWeight: 500 }}
+          style={{ fontSize: 14, fontWeight: 500 }}
         >
           <span className="truncate" style={{ maxWidth: 104 }}>
             {mec}
           </span>
           {carrinho && (
-            <span style={{ color: "var(--text-dim)", fontSize: 11 }}>{carrinho}</span>
+            <span style={{ color: "var(--text-dim)", fontSize: 12.5 }}>{carrinho}</span>
           )}
         </div>
 
         <div className="flex items-center gap-1.5" style={{ marginTop: 4 }}>
           <Plate value={os.placa} size="sm" />
-          <span style={{ color: "var(--text-dim)", fontSize: 11 }}>{os.modelo}</span>
+          <span style={{ color: "var(--text-dim)", fontSize: 13 }}>{os.modelo}</span>
         </div>
 
         {hasFlags && (

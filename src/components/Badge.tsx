@@ -18,8 +18,13 @@ export function Badge({
   const c = COLOR[color];
   return (
     <span
-      className="text-xs px-2 py-0.5 rounded-md inline-flex items-center gap-1 whitespace-nowrap"
-      style={{ color: c, background: `color-mix(in srgb, ${c} 16%, transparent)` }}
+      className="rounded-md inline-flex items-center gap-1 whitespace-nowrap"
+      style={{
+        fontSize: 13,
+        padding: "3px 9px",
+        color: c,
+        background: `color-mix(in srgb, ${c} 16%, transparent)`,
+      }}
     >
       {children}
     </span>

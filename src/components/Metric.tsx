@@ -12,12 +12,9 @@ export function Metric({
       className="rounded-lg px-4 py-3"
       style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
     >
-      <div className="text-xs" style={{ color: "var(--text-dim)" }}>
-        {label}
-      </div>
+      <div style={{ fontSize: 14, color: "var(--text-dim)" }}>{label}</div>
       <div
-        className="text-2xl font-medium mt-1"
-        style={{ color: color ?? "var(--text)" }}
+        style={{ fontSize: 32, fontWeight: 500, marginTop: 2, color: color ?? "var(--text)", lineHeight: 1.1 }}
       >
         {value}
       </div>

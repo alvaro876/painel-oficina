@@ -64,7 +64,7 @@ export function EquipeAgora({
             {working.map((t) => (
               <span
                 key={t.mecanico}
-                className="text-xs px-2 py-1 rounded-md"
+                className="text-sm px-2 py-1 rounded-md"
                 style={{ background: "var(--surface-2)" }}
               >
                 {nome(t.mecanico)}{" "}
@@ -90,7 +90,7 @@ export function EquipeAgora({
             {idle.map((t) => (
               <span
                 key={t.mecanico}
-                className="text-xs px-2 py-1 rounded-md inline-flex items-center gap-1"
+                className="text-sm px-2 py-1 rounded-md inline-flex items-center gap-1"
                 style={{
                   color: "var(--warn)",
                   background: "color-mix(in srgb, var(--warn) 16%, transparent)",

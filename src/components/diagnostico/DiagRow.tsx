@@ -30,13 +30,13 @@ export function DiagRow({ r }: { r: WorkshopOS }) {
     >
       <span
         className="shrink-0 rounded-full"
-        style={{ width: 10, height: 10, background: dot, marginTop: 7 }}
+        style={{ width: 12, height: 12, background: dot, marginTop: 8 }}
       />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
           <Plate value={r.placa} size="md" />
-          <span style={{ fontSize: 15 }}>{r.modelo}</span>
-          <span style={{ fontSize: 13, color: "var(--text-dim)" }}>
+          <span style={{ fontSize: 18 }}>{r.modelo}</span>
+          <span style={{ fontSize: 15, color: "var(--text-dim)" }}>
             · {STATUS_LABEL[r.status_atual]}
             {mec ? ` · ${mec}` : ""}
             {base ? ` · ${base.name}` : ""}
@@ -45,7 +45,7 @@ export function DiagRow({ r }: { r: WorkshopOS }) {
         {reclam && (
           <div
             className="clamp2"
-            style={{ fontSize: 13, color: "var(--text-dim)", marginTop: 5 }}
+            style={{ fontSize: 15, color: "var(--text-dim)", marginTop: 5 }}
             title={reclam}
           >
             <span style={{ color: "var(--text)" }}>Reclamação:</span> {reclam}

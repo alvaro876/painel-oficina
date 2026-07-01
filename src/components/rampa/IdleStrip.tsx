@@ -26,7 +26,7 @@ export function IdleStrip({ idle }: { idle: CartLogin[] }) {
           {idle.map((l) => (
             <span
               key={l.mecanico}
-              className="text-xs px-2 py-1 rounded-md"
+              className="text-sm px-2 py-1 rounded-md"
               style={{ background: "var(--surface-2)" }}
             >
               {l.mecanico.split("@")[0]}{" "}

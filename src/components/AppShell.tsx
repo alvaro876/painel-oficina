@@ -29,7 +29,7 @@ export function AppShell({
         style={{ borderColor: "var(--border)", background: "var(--surface)" }}
       >
         <div className="flex items-center gap-3 md:gap-5 min-w-0">
-          <span className="font-medium whitespace-nowrap text-sm md:text-base">
+          <span className="font-medium whitespace-nowrap text-base md:text-lg">
             Painel de Oficina
             <span className="hidden lg:inline" style={{ color: "var(--text-dim)" }}>
               {" "}· Vammo
@@ -42,7 +42,7 @@ export function AppShell({
                 <Link
                   key={t.href}
                   href={t.href + qs}
-                  className="px-3 py-1.5 rounded-md text-sm whitespace-nowrap transition-colors"
+                  className="px-3 py-2 rounded-md text-base whitespace-nowrap transition-colors"
                   style={{
                     color: active ? "var(--text)" : "var(--text-dim)",
                     background: active ? "var(--surface-2)" : "transparent",
