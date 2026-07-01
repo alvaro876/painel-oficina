@@ -39,7 +39,8 @@ pecas AS (
   SELECT
     si.so_id                                    AS so_id,
     sum(coalesce(nullIf(ig.time_target, 0), 0)) AS estimated_min,
-    count(DISTINCT si.item_group_id)            AS n_pecas
+    count(DISTINCT si.item_group_id)            AS n_pecas,
+    arrayFilter(x -> x != '', arrayDistinct(groupArray(coalesce(ig.name, '')))) AS pecas_nomes
   FROM oms_r.so_item si FINAL
   LEFT JOIN ims_r.item_group ig FINAL ON ig.id = si.item_group_id
   WHERE si._peerdb_is_deleted = 0
@@ -71,6 +72,8 @@ SELECT
   coalesce(u.email, '')                                                       AS mecanico_email,
   coalesce(p.estimated_min, 0)                                                AS estimated_min,
   coalesce(p.n_pecas, 0)                                                      AS n_pecas,
+  p.pecas_nomes                                                               AS pecas_nomes,
+  so.so_description                                                           AS reclamacao,
   if(so.id IN (SELECT so_id FROM piso), 1, 0)                                 AS is_piso,
   if(JSONExtractBool(so.maintenance_metadata, 'triage', 'incidents', 'towing')
      OR JSONExtractBool(so.maintenance_metadata, 'checklist_tags', 'towing'), 1, 0) AS is_guincho,

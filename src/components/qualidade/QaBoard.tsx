@@ -3,6 +3,8 @@ import { FRENTE_STATUSES } from "@/lib/status";
 import { baseById } from "@/lib/bases";
 import { TimeChip } from "@/components/TimeChip";
 import { Badge } from "@/components/Badge";
+import { Metric } from "@/components/Metric";
+import { Plate } from "@/components/Plate";
 
 const ORDER: Record<string, number> = { IN_QA: 0, QA_REJECTED: 1, AWAITING_QA: 2 };
 const CHIP: Record<string, { label: string; color: string }> = {
@@ -10,22 +12,6 @@ const CHIP: Record<string, { label: string; color: string }> = {
   QA_REJECTED: { label: "reprovada", color: "var(--danger)" },
   AWAITING_QA: { label: "na fila", color: "var(--text-dim)" },
 };
-
-function Metric({ label, value, color }: { label: string; value: number; color?: string }) {
-  return (
-    <div
-      className="rounded-lg px-4 py-3"
-      style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
-    >
-      <div className="text-xs" style={{ color: "var(--text-dim)" }}>
-        {label}
-      </div>
-      <div className="text-2xl font-medium mt-1" style={{ color: color ?? "var(--text)" }}>
-        {value}
-      </div>
-    </div>
-  );
-}
 
 export function QaBoard({
   rows,
@@ -64,13 +50,9 @@ export function QaBoard({
           {error}
         </div>
       )}
-
       {loading && qa.length === 0 && (
-        <div className="text-sm" style={{ color: "var(--text-dim)" }}>
-          carregando…
-        </div>
+        <div className="text-sm" style={{ color: "var(--text-dim)" }}>carregando…</div>
       )}
-
       {!loading && qa.length === 0 && !error && (
         <div className="text-sm" style={{ color: "var(--text-dim)" }}>
           Nenhuma moto na qualidade agora.
@@ -81,10 +63,11 @@ export function QaBoard({
         {qa.map((r) => {
           const chip = CHIP[r.status_atual] ?? { label: r.status_atual, color: "var(--text-dim)" };
           const base = baseById(r.location_id);
+          const mec = r.mecanico_email ? r.mecanico_email.split("@")[0] : null;
           return (
             <div
               key={r.so_id}
-              className="flex items-center gap-3 px-3 py-3 rounded-lg"
+              className="px-3 py-3 rounded-lg"
               style={{
                 background: "var(--surface)",
                 border:
@@ -93,28 +76,50 @@ export function QaBoard({
                     : "1px solid var(--border)",
               }}
             >
-              <span
-                className="text-xs px-2 py-1 rounded-md text-center shrink-0"
-                style={{
-                  width: 108,
-                  color: chip.color,
-                  background: `color-mix(in srgb, ${chip.color} 16%, transparent)`,
-                }}
-              >
-                {chip.label}
-              </span>
-              <div className="min-w-0">
-                <div className="font-mono font-medium">{r.placa}</div>
-                <div className="text-xs truncate" style={{ color: "var(--text-dim)" }}>
-                  {r.modelo}
-                  {r.mecanico_email ? ` · ${r.mecanico_email.split("@")[0]}` : ""}
-                  {base ? ` · ${base.name}` : ""}
+              <div className="flex items-center gap-3">
+                <span
+                  className="text-xs px-2 py-1 rounded-md text-center shrink-0"
+                  style={{ width: 108, color: chip.color, background: `color-mix(in srgb, ${chip.color} 16%, transparent)` }}
+                >
+                  {chip.label}
+                </span>
+                <Plate value={r.placa} size="md" />
+                <div className="min-w-0">
+                  <div className="text-sm truncate" style={{ color: "var(--text-dim)" }}>
+                    {r.modelo}
+                    {mec ? ` · ${mec}` : ""}
+                    {base ? ` · ${base.name}` : ""}
+                  </div>
+                </div>
+                <div className="ml-auto flex items-center gap-3 shrink-0">
+                  {r.is_piso === 1 && <Badge color="danger">piso</Badge>}
+                  <TimeChip min={r.min_in_status} status={r.status_atual} />
                 </div>
               </div>
-              <div className="ml-auto flex items-center gap-3 shrink-0">
-                {r.is_piso === 1 && <Badge color="danger">piso</Badge>}
-                <TimeChip min={r.min_in_status} status={r.status_atual} />
-              </div>
+
+              {r.pecas_nomes && r.pecas_nomes.length > 0 && (
+                <div style={{ marginTop: 10 }}>
+                  <div className="text-xs mb-1.5" style={{ color: "var(--text-dim)" }}>
+                    Peças trocadas ({r.pecas_nomes.length})
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {r.pecas_nomes.map((p, i) => (
+                      <span
+                        key={i}
+                        className="rounded-md"
+                        style={{
+                          fontSize: 12.5,
+                          padding: "3px 9px",
+                          background: "var(--surface-2)",
+                          color: "var(--text)",
+                        }}
+                      >
+                        {p}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}

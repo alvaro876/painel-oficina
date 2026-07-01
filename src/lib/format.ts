@@ -16,3 +16,8 @@ export function clock(min: number): string {
   const h = Math.floor(m / 60);
   return `${h}:${(m % 60).toString().padStart(2, "0")}`;
 }
+
+/** Colapsa quebras de linha e espaços múltiplos numa linha só. */
+export function oneLine(s: string): string {
+  return (s || "").replace(/\s+/g, " ").trim();
+}

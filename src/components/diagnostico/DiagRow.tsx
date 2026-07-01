@@ -2,9 +2,11 @@ import type { WorkshopOS } from "@/types";
 import { STATUS_LABEL, isBoxRapido } from "@/lib/status";
 import { ANOMALY, TIME_RED } from "@/config/thresholds";
 import { baseById } from "@/lib/bases";
+import { oneLine } from "@/lib/format";
 import { TimeChip } from "@/components/TimeChip";
 import { Badge } from "@/components/Badge";
 import { IncidentBadge } from "@/components/IncidentBadge";
+import { Plate } from "@/components/Plate";
 
 export function DiagRow({ r }: { r: WorkshopOS }) {
   const anomalia = r.min_in_status > ANOMALY.stuckMin;
@@ -14,10 +16,11 @@ export function DiagRow({ r }: { r: WorkshopOS }) {
   const dot = red ? "var(--danger)" : amber ? "var(--warn)" : "var(--ok)";
   const base = baseById(r.location_id);
   const mec = r.mecanico_email ? r.mecanico_email.split("@")[0] : null;
+  const reclam = oneLine(r.reclamacao);
 
   return (
     <div
-      className="flex items-center gap-3 px-3 py-3 rounded-lg"
+      className="flex items-start gap-3 px-3 py-3 rounded-lg"
       style={{
         background: "var(--surface)",
         border: anomalia
@@ -27,17 +30,29 @@ export function DiagRow({ r }: { r: WorkshopOS }) {
     >
       <span
         className="shrink-0 rounded-full"
-        style={{ width: 9, height: 9, background: dot }}
+        style={{ width: 10, height: 10, background: dot, marginTop: 7 }}
       />
-      <div className="min-w-0">
-        <div className="font-mono font-medium">{r.placa}</div>
-        <div className="text-xs truncate" style={{ color: "var(--text-dim)" }}>
-          {r.modelo} · {STATUS_LABEL[r.status_atual]}
-          {mec ? ` · ${mec}` : ""}
-          {base ? ` · ${base.name}` : ""}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2 flex-wrap">
+          <Plate value={r.placa} size="md" />
+          <span style={{ fontSize: 15 }}>{r.modelo}</span>
+          <span style={{ fontSize: 13, color: "var(--text-dim)" }}>
+            · {STATUS_LABEL[r.status_atual]}
+            {mec ? ` · ${mec}` : ""}
+            {base ? ` · ${base.name}` : ""}
+          </span>
         </div>
+        {reclam && (
+          <div
+            className="clamp2"
+            style={{ fontSize: 13, color: "var(--text-dim)", marginTop: 5 }}
+            title={reclam}
+          >
+            <span style={{ color: "var(--text)" }}>Reclamação:</span> {reclam}
+          </div>
+        )}
       </div>
-      <div className="ml-auto flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-2 shrink-0" style={{ marginTop: 3 }}>
         {r.is_piso === 1 && <Badge color="danger">piso</Badge>}
         {isBoxRapido(r.so_type) && <Badge color="info">box rápido</Badge>}
         <IncidentBadge guincho={r.is_guincho === 1} recidivism={r.is_recidivism === 1} />

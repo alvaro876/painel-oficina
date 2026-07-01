@@ -2,6 +2,7 @@ import type { WorkshopOS } from "@/types";
 import { TIME_RED } from "@/config/thresholds";
 import { isBoxRapido } from "@/lib/status";
 import { EstimateMeter } from "@/components/EstimateMeter";
+import { Plate } from "@/components/Plate";
 
 function Tag({ children, color }: { children: React.ReactNode; color: string }) {
   return (
@@ -105,19 +106,9 @@ export function CartCard({
           )}
         </div>
 
-        <div className="font-mono" style={{ fontSize: 13.5, fontWeight: 500, marginTop: 3 }}>
-          {os.placa}
-          <span
-            style={{
-              color: "var(--text-dim)",
-              fontWeight: 400,
-              fontFamily: "var(--font-sans)",
-              fontSize: 11,
-            }}
-          >
-            {" "}
-            · {os.modelo}
-          </span>
+        <div className="flex items-center gap-1.5" style={{ marginTop: 4 }}>
+          <Plate value={os.placa} size="sm" />
+          <span style={{ color: "var(--text-dim)", fontSize: 11 }}>{os.modelo}</span>
         </div>
 
         {hasFlags && (

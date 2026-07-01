@@ -24,6 +24,8 @@ export interface WorkshopOS {
   mecanico_email: string;
   estimated_min: number;
   n_pecas: number;
+  pecas_nomes: string[]; // peças diagnosticadas/trocadas
+  reclamacao: string; // so_description (reclamação do cliente)
   is_piso: number; // 0 | 1
   is_guincho: number; // 0 | 1 — triage.incidents.towing
   is_recidivism: number; // 0 | 1 — triage.incidents.recidivism (reincidente)
